@@ -22,7 +22,7 @@ Each slash page is an outline of `type="link"`:
 
 - `text` (required): a human readable title of the page.
 - `url` (required): the absolute URL of the page. The URL does not have to match the name, so a site can list its `/now` page at `https://example.com/jetzt/` or `https://example.com/now.html`.
-- `category` (recommended): the name of the slash page, with the leading slash. If the page is one of the pages listed on [slashpages.net](https://slashpages.net/), the name should be the one used there (for example `/now`, `/uses` or `/colophon`). Other names are allowed. As defined by OPML 2.0, `category` is a comma-separated list, and every value is one name, so `category="/now,/jetzt"` lists the page under both names.
+- `category` (recommended): the name of the slash page, in lowercase and with the leading slash. If the page is one of the pages listed on [slashpages.net](https://slashpages.net/), the name should be the one used there (for example `/now`, `/uses` or `/colophon`). Other names are allowed. As defined by OPML 2.0, `category` is a comma-separated list, and every value is one name, so `category="/now,/jetzt"` lists the page under both names. If slashpages.net has more than one name for the same page, the page should be listed under all of them, the first name first (for example `category="/changelog,/log"`). This is only for names of the same page: `/guy` and `/girl` are different pages.
 
 Outlines of `type="include"` pointing to further OPML documents, or any other valid OPML content, are allowed too. Consumers that follow includes should limit how deep they follow them and should not load the same document twice.
 
@@ -38,6 +38,7 @@ Example:
   <body>
     <outline type="link" text="About me" category="/about" url="https://example.com/about/" />
     <outline type="link" text="What I am doing now" category="/now" url="https://example.com/now/" />
+    <outline type="link" text="Changelog" category="/changelog,/log" url="https://example.com/log/" />
     <outline type="link" text="Blogroll" category="/blogroll" url="https://example.com/links/blogs/" />
   </body>
 </opml>
