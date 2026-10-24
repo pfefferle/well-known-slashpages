@@ -16,15 +16,15 @@ Related information: Slash Pages <https://slashpages.net/>, OPML 2.0 specificati
 
 ## Representation
 
-The `slashpages` well-known resource endpoint provides an OPML document of any valid OPML version. That OPML document's `<body>` is expected to contain one or more `<outline>` elements, referencing some or all of the slash pages of the website, like `/about`, `/now`, `/uses` or `/blogroll`.
+The `slashpages` well-known resource endpoint provides an [OPML 2.0](http://opml.org/spec2.opml) document. That OPML document's `<body>` is expected to contain one or more `<outline>` elements, referencing some or all of the slash pages of the website, like `/about`, `/now`, `/uses` or `/blogroll`.
 
 Each slash page is an outline of `type="link"`:
 
 - `text` (required): a human readable title of the page.
-- `url` (required): the URL of the page. The URL does not have to match the name, so a site can list its `/now` page at `/jetzt/` or `https://example.com/now.html`.
-- `category` (recommended): the name of the slash page, with the leading slash. If the page is one of the pages listed on [slashpages.net](https://slashpages.net/), the name should be the one used there (for example `/now`, `/uses` or `/colophon`). Other names are allowed.
+- `url` (required): the absolute URL of the page. The URL does not have to match the name, so a site can list its `/now` page at `https://example.com/jetzt/` or `https://example.com/now.html`.
+- `category` (recommended): the name of the slash page, with the leading slash. If the page is one of the pages listed on [slashpages.net](https://slashpages.net/), the name should be the one used there (for example `/now`, `/uses` or `/colophon`). Other names are allowed. As defined by OPML 2.0, `category` is a comma-separated list, and every value is one name, so `category="/now,/jetzt"` lists the page under both names.
 
-Outlines of `type="include"` pointing to further OPML documents, or any other valid OPML content, are allowed too.
+Outlines of `type="include"` pointing to further OPML documents, or any other valid OPML content, are allowed too. Consumers that follow includes should limit how deep they follow them and should not load the same document twice.
 
 Example:
 
@@ -43,7 +43,7 @@ Example:
 </opml>
 ```
 
-If in-use by a website, a request to the `slashpages` well-known resource endpoint must return a valid OPML document using the `text/x-opml`, `application/xml`, or `text/xml` MIME type.
+If in-use by a website, a request to the `slashpages` well-known resource endpoint must return a valid OPML document using the `text/x-opml`, `application/xml`, or `text/xml` MIME type. It should be served with the `Access-Control-Allow-Origin: *` header, so browser based tools can read it.
 
 ## As an alternative to `/slashes`
 
@@ -64,4 +64,6 @@ If in-use by a website, a request to the `slashpages` well-known resource endpoi
 
 ## Security Considerations
 
-The document should only list pages that are already public. There are no further security considerations for this well-known resource identifier.
+- The document should only list pages that are already public.
+- A `url` can point to another site. Consumers should not assume that such a page belongs to the site that serves the document, for example a directory should check the page before it lists it.
+- Includes can point to other sites and can loop. Consumers should limit how deep they follow them, should not load the same document twice, and should keep in mind that every include is a request to another server.
